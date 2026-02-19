@@ -36,8 +36,8 @@ See [METHODS.md](METHODS.md) for full detector specification and [REPRODUCIBILIT
 
 ## Links
 
-- Distill page: https://sohailmo.ai/research/paper-a-escape-velocity/
-- PDF: https://sohailmo.ai/papers/paper-a-escape-velocity-2026.pdf
+- Distill page: https://sohailmo.ai/research/escape-velocity/
+- PDF: https://sohailmo.ai/papers/escape-velocity-2026.pdf
 - Public code/data repo: https://github.com/Sohailm25/escape-velocity
 
 ## Quick Start
