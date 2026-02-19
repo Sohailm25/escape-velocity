@@ -34,6 +34,12 @@ See [METHODS.md](METHODS.md) for full detector specification and [REPRODUCIBILIT
 | Turns per trajectory | 40 (locked, no early stopping) |
 | Generation | temp=0.7, top_p=0.95, max_tokens=256 |
 
+## Links
+
+- Distill page: https://sohailmo.ai/research/paper-a-escape-velocity/
+- PDF: https://sohailmo.ai/papers/paper-a-escape-velocity-2026.pdf
+- Public code/data repo: https://github.com/Sohailm25/escape-velocity
+
 ## Quick Start
 
 ```bash
