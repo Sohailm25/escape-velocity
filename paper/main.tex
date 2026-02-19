@@ -1,0 +1,156 @@
+\documentclass[11pt]{article}
+
+% === Packages ===
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{xcolor}
+
+% === Title ===
+\title{Condition-Dependent Collapse Dynamics in Multi-Turn LLM Self-Play}
+\author{Sohail Mohammad}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a systematic empirical study of conversational collapse dynamics in multi-turn self-play between 7B-parameter language models. Using a preregistered confirmatory design (N=720 trajectories: 4 conditions $\times$ 36 seeds $\times$ 5 repeats, 40 turns each), we characterize collapse behavior across homogeneous self-play configurations (Llama-3.1-8B, Qwen2.5-7B, Mistral-7B-v0.3) and a heterogeneous rotation condition. Baseline execution achieved complete tuple closure (720/720) with full protocol integrity. Collapse dynamics were condition-dependent: Qwen2.5-7B homogeneous self-play exhibited the highest mean collapse rate (0.773), while Mistral-7B showed the lowest (0.141). Heterogeneous model rotation produced intermediate collapse (0.250). The preregistered detector reliability criterion (Cohen's $\kappa \geq 0.80$) was not met ($\kappa = 0.566$; raw agreement 92.8\%). Consequently, all collapse-pattern findings are reported as descriptive rather than detector-validated.
+\end{abstract}
+
+% === Introduction ===
+\section{Introduction}
+Long-horizon language-model interaction can drift into repetitive output regimes that degrade
+novelty and responsiveness. Related concerns about repetition, degeneration, and reliability in
+generative systems are well documented in single-agent and dialogue settings
+\citep{holtzman2019curious,li2016diversity,welleck2020neural}. However, less is known about how
+such behavior distributes across controlled multi-turn self-play conditions when protocol settings
+are held fixed.
+
+Paper A was designed as a preregistered baseline characterization study rather than an
+intervention paper. The confirmatory objective was to estimate condition-level collapse patterns
+under a locked detector and to evaluate detector reliability against an independent audit gate.
+Because the preregistered reliability threshold was not met ($\kappa=0.566$, threshold 0.80), this
+manuscript follows Path B claim governance: transparent downgrade of inferential scope.
+
+Accordingly, our claims are limited to: (i) execution closure and protocol integrity, and
+(ii) descriptive, condition-comparative patterns under the locked detector definition. We do
+not claim detector validation, causal condition effects, or mitigation efficacy.
+
+% === Methods ===
+\section{Methods}
+
+\subsection{Confirmatory design}
+The locked confirmatory design was $4 \times 36 \times 5$: 4 conditions (HOMO\_A, HOMO\_B,
+HOMO\_C, HETERO\_ROT) $\times$ 36 seed prompts $\times$ 5 repeats, yielding 720 unique
+trajectories. Each trajectory ran for exactly 40 turns with no early stopping. The trajectory
+unit is a tuple $(\text{condition} \times \text{seed} \times \text{repeat})$.
+
+\subsection{Conditions and model mapping}
+\begin{itemize}
+    \item \textbf{HOMO\_A:} Llama-3.1-8B-Instruct (rev \texttt{0e9e39f2})
+    \item \textbf{HOMO\_B:} Qwen2.5-7B-Instruct (rev \texttt{a09a3545})
+    \item \textbf{HOMO\_C:} Mistral-7B-Instruct-v0.3 (rev \texttt{c170c708})
+    \item \textbf{HETERO\_ROT:} round-robin rotation across all three model families
+\end{itemize}
+Generation settings were fixed at temperature 0.7, top-$p$ 0.95, and max tokens 256.
+
+\subsection{Collapse detector (locked operating point)}
+Collapse was detected with an embedding-based rule set using
+\texttt{sentence-transformers/all-MiniLM-L6-v2} \citep{reimers2019sentencebert}. At turn $t$,
+periodicity features were defined as $s_{1,t}=\cos(e_t,e_{t-1})$ and
+$s_{2,t}=\cos(e_t,e_{t-2})$, with thresholds $s_{1,t}\geq0.92$ or $s_{2,t}\geq0.90$ sustained
+for at least three consecutive turns. Drift constraints were
+$d_1\leq0.08$, $d_2\leq0.10$, where $d_k=1-\cos(\cdot)$. A turn was labeled collapsed only when
+periodicity and low-drift criteria co-occurred.
+
+\subsection{Reliability gate protocol}
+The preregistered reliability gate required Cohen's $\kappa \geq 0.80$ on a stratified
+180-window audit sample. Two independent LLM raters labeled windows under a locked rubric.
+Final gate result was \textbf{NOT MET}: $\kappa=0.566$ (167/180 agreement; 92.8\% raw agreement).
+
+\subsection{Artifacts and reproducibility contract}
+The canonical source artifact for confirmatory summaries is the frozen baseline matrix
+(coverage matrix hash recorded in the submission reproducibility index and freeze note).
+Tables and figures in this manuscript were generated from that frozen artifact.
+
+% === Results ===
+\section{Results}
+
+\subsection{Baseline completion}
+The confirmatory baseline matrix completed in full: 720/720 tuples succeeded with protocol
+integrity (all 40 turns, no early stopping).
+
+\subsection{Condition-level collapse patterns}
+
+\begin{table}[h]
+\centering
+\caption{Condition-level collapse summary (N=180 each).}
+\label{tab:condition_summary}
+\begin{tabular}{lcccc}
+\toprule
+Condition & Mean & Median & SD & N \\
+\midrule
+HOMO\_A (Llama)    & 0.457 & 0.475 & 0.311 & 180 \\
+HOMO\_B (Qwen)     & 0.773 & 0.850 & 0.210 & 180 \\
+HOMO\_C (Mistral)  & 0.141 & 0.025 & 0.208 & 180 \\
+HETERO\_ROT        & 0.250 & 0.138 & 0.281 & 180 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/figure_1_mean_collapse_by_condition.pdf}
+\caption{Mean collapse rate by condition with standard deviation error bars.}
+\label{fig:mean_collapse}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/figure_2_collapse_distribution.pdf}
+\caption{Collapse rate distribution by condition (boxplot with jittered strip overlay).}
+\label{fig:collapse_dist}
+\end{figure}
+
+\subsection{Detector reliability}
+The preregistered reliability criterion ($\kappa \geq 0.80$) was not met. Although raw agreement
+was high (92.8\%), estimated reliability remained at $\kappa=0.566$ under high collapse
+prevalence in the audit set.
+
+% === Discussion ===
+\section{Discussion}
+Under fixed protocol settings, collapse dynamics varied substantially by condition. The observed
+ordering (HOMO\_B $>$ HOMO\_A $>$ HETERO\_ROT $>$ HOMO\_C) was stable in this dataset and provides a
+useful descriptive baseline for follow-on work.
+
+Path B constraints are central to interpretation. Because the preregistered reliability gate was
+not met, these results should be used as detector-defined descriptive evidence only. They support
+prioritizing stronger human-labeled reliability procedures and alternative detector formulations
+before any confirmatory or causal claim expansion.
+
+% === Limitations ===
+\section{Limitations}
+The preregistered detector reliability gate was not met ($\kappa=0.566$; threshold 0.80).
+Three rubric iterations were conducted (v1.0: $\kappa=0.011$; v2.1: $\kappa=0.519$;
+v3.0: $\kappa=0.566$). The gap between raw agreement (92.8\%) and $\kappa$ is consistent with
+strong prevalence skew. A prevalence-adjusted statistic (PABAK = 0.856) is reported as
+supplementary sensitivity information, not as gate replacement.
+
+Consequently, all findings are descriptive and condition-comparative rather than
+detector-validated.
+
+% === Conclusion ===
+\section{Conclusion}
+We provide a fully closed confirmatory baseline (720/720 tuples) for condition-dependent
+collapse behavior in 7B-model self-play under a locked protocol. The present contribution is a
+reproducible descriptive benchmark under Path B claim governance; detector-validation and
+intervention efficacy remain open tasks for future work.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

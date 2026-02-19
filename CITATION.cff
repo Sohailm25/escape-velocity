@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this data or code, please cite as below."
+title: "Condition-Dependent Collapse Dynamics in Multi-Turn LLM Self-Play"
+authors:
+  - family-names: Mohammad
+    given-names: Sohail
+type: dataset
+date-released: 2026-02-19
+repository-code: https://github.com/Sohailm25/paper-a-escape-velocity
+license: MIT
+keywords:
+  - language models
+  - self-play
+  - collapse detection
+  - multi-turn conversation
+  - LLM evaluation
+abstract: >-
+  Systematic empirical study of conversational collapse dynamics in multi-turn
+  self-play between 7B-parameter language models. 720 trajectories across 4
+  conditions with preregistered confirmatory design. Detector reliability gate
+  not met (kappa=0.566); findings are descriptive.

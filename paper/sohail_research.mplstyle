@@ -1,0 +1,80 @@
+# sohail_research.mplstyle
+# Research figure style derived from sohailmo.ai theme (Everforest-inspired)
+# Designed for white-background PDF figures with dark accents
+#
+# Usage:
+#   import matplotlib.pyplot as plt
+#   plt.style.use('path/to/sohail_research.mplstyle')
+
+# === Color Cycle ===
+# Adapted from sohailmo.ai: sage greens, blue-teal, warm coral, muted purple, amber
+# Darkened slightly from web theme for print contrast on white
+axes.prop_cycle: cycler('color', ["4A7A5B", "5A9BA3", "C44D5E", "7B6B8A", "B8943E", "2d353b"])
+# 1: Forest green (from #A7C080 darkened for white bg)
+# 2: Teal (from #7FBBB3 darkened)
+# 3: Coral red (from #D86676 — your accent warm tone)
+# 4: Muted purple (complement to greens)
+# 5: Warm amber (complement to teals)
+# 6: Dark charcoal (from #2d353b — your bg as an accent)
+
+# === Typography ===
+font.family: sans-serif
+font.sans-serif: Inter, Helvetica Neue, Helvetica, Arial, sans-serif
+font.size: 10
+axes.titlesize: 12
+axes.titleweight: 600
+axes.labelsize: 11
+axes.labelweight: 500
+xtick.labelsize: 9
+ytick.labelsize: 9
+
+# === Axes ===
+axes.spines.top: False
+axes.spines.right: False
+axes.linewidth: 0.8
+axes.edgecolor: "4a555b"
+axes.labelcolor: "2d353b"
+axes.facecolor: white
+
+# === Grid ===
+axes.grid: True
+axes.grid.axis: y
+grid.color: "A7C080"
+grid.alpha: 0.12
+grid.linewidth: 0.5
+grid.linestyle: -
+
+# === Figure ===
+figure.figsize: 6.5, 4.0
+figure.dpi: 150
+figure.facecolor: white
+figure.edgecolor: white
+savefig.dpi: 300
+savefig.bbox: tight
+savefig.pad_inches: 0.15
+savefig.facecolor: white
+
+# === Legend ===
+legend.frameon: False
+legend.fontsize: 9
+legend.loc: best
+legend.borderpad: 0.4
+legend.labelspacing: 0.5
+
+# === Lines ===
+lines.linewidth: 2.0
+lines.markersize: 7
+
+# === Patches (bars, etc.) ===
+patch.linewidth: 0.5
+patch.edgecolor: white
+
+# === Ticks ===
+xtick.direction: out
+ytick.direction: out
+xtick.major.width: 0.8
+ytick.major.width: 0.8
+xtick.major.size: 4
+ytick.major.size: 4
+xtick.color: "4a555b"
+ytick.color: "4a555b"

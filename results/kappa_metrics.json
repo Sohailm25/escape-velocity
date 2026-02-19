@@ -1,0 +1,20 @@
+{
+  "n_valid": 180,
+  "n_total": 180,
+  "null_count": 0,
+  "agreement_raw": 167,
+  "agreement_pct": 92.8,
+  "cohens_kappa": 0.5663,
+  "contingency": {
+    "both_1": 157,
+    "oai1_ant0": 7,
+    "oai0_ant1": 6,
+    "both_0": 10
+  },
+  "rubric_version": "3.0",
+  "rater1": "gpt-4o",
+  "rater2": "claude-sonnet-4-20250514",
+  "gate_threshold": 0.8,
+  "gate_passed": false,
+  "n_disagreements": 13
+}
