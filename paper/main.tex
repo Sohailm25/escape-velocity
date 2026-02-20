@@ -11,14 +11,20 @@
 
 % === Title ===
 \title{Condition-Dependent Collapse Dynamics in Multi-Turn LLM Self-Play}
-\author{Sohail Mohammad}
-\date{\today}
+\author{
+  Sohail Mohammad \\
+  Independent Researcher \\
+  \texttt{sohailmo.ai@gmail.com}
+}
+\date{February 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We present a systematic empirical study of conversational collapse dynamics in multi-turn self-play between 7B-parameter language models. Using a preregistered confirmatory design (N=720 trajectories: 4 conditions $\times$ 36 seeds $\times$ 5 repeats, 40 turns each), we characterize collapse behavior across homogeneous self-play configurations (Llama-3.1-8B, Qwen2.5-7B, Mistral-7B-v0.3) and a heterogeneous rotation condition. Baseline execution achieved complete tuple closure (720/720) with full protocol integrity. Collapse dynamics were condition-dependent: Qwen2.5-7B homogeneous self-play exhibited the highest mean collapse rate (0.773), while Mistral-7B showed the lowest (0.141). Heterogeneous model rotation produced intermediate collapse (0.250). The preregistered detector reliability criterion (Cohen's $\kappa \geq 0.80$) was not met ($\kappa = 0.566$; raw agreement 92.8\%). Consequently, all collapse-pattern findings are reported as descriptive rather than detector-validated.
+When two chat models converse for 40 turns, do they keep producing novel responses or collapse into repetitive loops? We measured this across 720 conversations under a preregistered design (4 conditions $\times$ 36 seeds $\times$ 5 repeats, 40 turns each) spanning homogeneous self-play configurations (Llama-3.1-8B, Qwen2.5-7B, Mistral-7B-v0.3) and a heterogeneous rotation condition. All 720 conversations ran to completion with full protocol integrity. Collapse rates varied substantially by condition: Qwen2.5-7B homogeneous self-play exhibited the highest mean collapse rate (0.773), while Mistral-7B showed the lowest (0.141); heterogeneous rotation produced intermediate collapse (0.250). However, the preregistered detector reliability criterion (Cohen's $\kappa \geq 0.80$) was not met ($\kappa = 0.566$; raw agreement 92.8\%). Because of this, all findings are reported as descriptive observations---we report observed patterns, not validated detector claims or causal explanations.
+
+The primary contributions of this work are: (1)~a locked, reproducible measurement protocol for multi-turn collapse with frozen artifacts; (2)~a complete 720-trajectory descriptive benchmark; and (3)~a transparent account of a preregistered reliability gate failure and its consequences for claim scope, which we believe is independently informative for researchers designing LLM evaluation pipelines.
 \end{abstract}
 
 % === Introduction ===
@@ -26,19 +32,50 @@ We present a systematic empirical study of conversational collapse dynamics in m
 Long-horizon language-model interaction can drift into repetitive output regimes that degrade
 novelty and responsiveness. Related concerns about repetition, degeneration, and reliability in
 generative systems are well documented in single-agent and dialogue settings
-\citep{holtzman2019curious,li2016diversity,welleck2020neural}. However, less is known about how
-such behavior distributes across controlled multi-turn self-play conditions when protocol settings
-are held fixed.
+\citep{holtzman2019curious,li2016diversity,welleck2020neural}. Recent work has identified similar
+phenomena in multi-agent and reinforcement-learning settings: echo-trap dynamics in agentic
+self-play \citep{ragen2025}, behavior collapse under multi-turn RL training
+\citep{kumar2024score}, and thinking collapse in reasoning self-play \citep{spiral2025}.
+However, less is known about how such behavior distributes across controlled multi-turn
+self-play conditions when protocol settings are held fixed and detector reliability is
+independently audited.
 
-Paper A was designed as a preregistered baseline characterization study rather than an
-intervention paper. The confirmatory objective was to estimate condition-level collapse patterns
-under a locked detector and to evaluate detector reliability against an independent audit gate.
-Because the preregistered reliability threshold was not met ($\kappa=0.566$, threshold 0.80), this
-manuscript follows Path B claim governance: transparent downgrade of inferential scope.
+Escape Velocity was designed as a preregistered baseline characterization study, not a
+detector-validation or intervention paper. The confirmatory objective was to estimate
+condition-level collapse patterns under a locked detector and to evaluate detector reliability
+against an independent audit gate. Because the preregistered reliability threshold was not met
+($\kappa=0.566$, threshold 0.80), this manuscript follows a transparent downgrade protocol
+(Path~B): all conclusions are narrowed to descriptive findings only.
 
-Accordingly, our claims are limited to: (i) execution closure and protocol integrity, and
-(ii) descriptive, condition-comparative patterns under the locked detector definition. We do
-not claim detector validation, causal condition effects, or mitigation efficacy.
+Accordingly, our claims are limited to: (i)~execution closure and protocol integrity, and
+(ii)~descriptive, condition-comparative patterns under the locked detector definition. We do
+not claim detector validation, causal condition effects, or mitigation efficacy. We believe the
+protocol itself---including the reliability failure and its transparent handling---is the primary
+contribution.
+
+\section{What "collapse" looks like in raw transcripts}
+The intuition is straightforward: if two models keep talking for 40 turns, do responses stay meaningfully novel, or do they get trapped in repetitive response shells? We selected representative examples after scanning all 180 cached trajectories in the audit turn-log set.
+
+\subsection{Example A (strong repetition loop: Qwen homogeneous, HOMO\_B)}
+\textbf{Turn 18:} ``And there you have it! The function absolutely nails it, delivering the exact value we were hoping for ...''\\
+\textbf{Turn 24:} ``And there you have it! The function absolutely nails it, delivering the exact value we were hoping for ...''\\
+\textbf{Turn 39:} ``Got it! Here's your comment: And there you have it! The function absolutely nails it ...''
+
+Interpretation: near-identical template reuse persists over long spans, matching the detector's collapse signature.
+
+\subsection{Example B (low-collapse trajectory: Mistral homogeneous, HOMO\_C)}
+\textbf{Turn 18:} ``Bias mitigation ... fairness-aware machine learning algorithms ...''\\
+\textbf{Turn 24:} ``Explainability and transparency are also important for regulatory compliance ...''\\
+\textbf{Turn 39:} ``Thank you ... don't hesitate to reach out if you have other questions ...''
+
+Interpretation: still topically related, but content continues to move and reframe rather than locking into one repeated template.
+
+\subsection{Example C (intermediate pattern: heterogeneous rotation, HETERO\_ROT)}
+\textbf{Turn 18:} ``Develop and implement policies and regulations to reduce greenhouse gas emissions ...''\\
+\textbf{Turn 30:} ``By working together, we can make a significant difference ...''\\
+\textbf{Turn 39:} ``I hope this document provided a useful framework ...''
+
+Interpretation: thematic repetition is present, but template-locking is weaker than in the highest-collapse homogeneous runs.
 
 % === Methods ===
 \section{Methods}
@@ -49,6 +86,17 @@ HOMO\_C, HETERO\_ROT) $\times$ 36 seed prompts $\times$ 5 repeats, yielding 720 
 trajectories. Each trajectory ran for exactly 40 turns with no early stopping. The trajectory
 unit is a tuple $(\text{condition} \times \text{seed} \times \text{repeat})$.
 
+\subsection{Seed prompts}
+The 36 seed prompts (SEEDS\_V2) were drawn from six topical buckets---factual Q\&A,
+instruction following, creative rewrite, argumentative, conversational, and practical
+task---with six prompts per bucket. This stratification ensured coverage across prompt
+types that might differentially elicit collapse. Examples include ``Explain why eclipses
+do not happen every month'' (factual), ``Give me exactly 3 bullet points on how to prepare
+for a technical interview'' (instruction), and ``Argue both for and against using
+open-weight models in production safety-critical systems'' (argumentative). The full seed
+set with bucket assignments is available in the companion repository.\footnote{%
+  \url{https://github.com/Sohailm25/escape-velocity}, \texttt{seeds/SEEDS\_V2.json}}
+
 \subsection{Conditions and model mapping}
 \begin{itemize}
     \item \textbf{HOMO\_A:} Llama-3.1-8B-Instruct (rev \texttt{0e9e39f2})
@@ -56,7 +104,18 @@ unit is a tuple $(\text{condition} \times \text{seed} \times \text{repeat})$.
     \item \textbf{HOMO\_C:} Mistral-7B-Instruct-v0.3 (rev \texttt{c170c708})
     \item \textbf{HETERO\_ROT:} round-robin rotation across all three model families
 \end{itemize}
-Generation settings were fixed at temperature 0.7, top-$p$ 0.95, and max tokens 256.
+Generation settings were fixed at temperature 0.7, top-$p$ 0.95, and max tokens 256 per turn.
+
+\subsection{Context window handling}
+The full conversation history is passed to the model at each turn without truncation. At 40
+turns with up to 256 tokens each, conversations can reach approximately 10,000 tokens. The
+three models used have context windows of 8,192 (Llama-3.1-8B, Mistral-7B) to 32,768
+(Qwen2.5-7B) tokens. In practice, most conversations stayed within 8K tokens because
+collapsed turns produce short repetitive outputs. We did not implement explicit truncation;
+if a conversation exceeded the model's context window, the model's internal handling
+(typically silent truncation from the left) would apply. This is a limitation: later-turn
+behavior in longer conversations may be partially confounded by context overflow, though
+the 256-token generation cap limits total length growth.
 
 \subsection{Collapse detector (locked operating point)}
 Collapse was detected with an embedding-based rule set using
@@ -69,8 +128,16 @@ periodicity and low-drift criteria co-occurred.
 
 \subsection{Reliability gate protocol}
 The preregistered reliability gate required Cohen's $\kappa \geq 0.80$ on a stratified
-180-window audit sample. Two independent LLM raters labeled windows under a locked rubric.
-Final gate result was \textbf{NOT MET}: $\kappa=0.566$ (167/180 agreement; 92.8\% raw agreement).
+180-window audit sample (45 per condition). Two independent LLM raters---GPT-5.2 (OpenAI) and
+Claude 4.6 Opus (Anthropic)---labeled windows under a locked rubric (v3.0). Final gate result
+was \textbf{NOT MET}: $\kappa=0.566$ (167/180 agreement; 92.8\% raw agreement).
+
+\paragraph{LLM-rater circularity risk.} The reliability audit used LLM raters rather than
+human annotators. This introduces circularity: LLMs evaluating LLM-generated text may share
+systematic biases (e.g., both raters might over- or under-detect repetition in ways that
+correlate with their own generation tendencies). The ``independence'' of the two raters is
+limited by potential overlap in training data and architectural similarities. We consider
+a human-rater reliability audit the highest-priority follow-up for resolving this limitation.
 
 \subsection{Artifacts and reproducibility contract}
 The canonical source artifact for confirmatory summaries is the frozen baseline matrix
@@ -124,8 +191,7 @@ prevalence in the audit set.
 % === Discussion ===
 \section{Discussion}
 Under fixed protocol settings, collapse dynamics varied substantially by condition. The observed
-ordering (HOMO\_B $>$ HOMO\_A $>$ HETERO\_ROT $>$ HOMO\_C) was stable in this dataset and provides a
-useful descriptive baseline for follow-on work.
+ordering (HOMO\_B $>$ HOMO\_A $>$ HETERO\_ROT $>$ HOMO\_C) was stable in this dataset and is consistent with meaningful condition-level differences, but it remains descriptive rather than causal.
 
 Path B constraints are central to interpretation. Because the preregistered reliability gate was
 not met, these results should be used as detector-defined descriptive evidence only. They support
@@ -133,22 +199,66 @@ prioritizing stronger human-labeled reliability procedures and alternative detec
 before any confirmatory or causal claim expansion.
 
 % === Limitations ===
-\section{Limitations}
-The preregistered detector reliability gate was not met ($\kappa=0.566$; threshold 0.80).
-Three rubric iterations were conducted (v1.0: $\kappa=0.011$; v2.1: $\kappa=0.519$;
-v3.0: $\kappa=0.566$). The gap between raw agreement (92.8\%) and $\kappa$ is consistent with
-strong prevalence skew. A prevalence-adjusted statistic (PABAK = 0.856) is reported as
-supplementary sensitivity information, not as gate replacement.
 
-Consequently, all findings are descriptive and condition-comparative rather than
-detector-validated.
+\subsection{Decision relevance}
+
+\paragraph{What this study shows.} A complete dataset of 720 multi-turn conversations across four controlled conditions, and descriptive evidence that collapse rates vary by model pairing under fixed protocol settings.
+
+\paragraph{What this study does not show.} That the collapse detector is reliable (the preregistered gate was not met); why certain conditions collapse more (no causal or mechanistic claims are made); or that these patterns generalize beyond the specific models and settings tested.
+
+\noindent The highest-value follow-up is independent human-rater reliability audit to test whether condition-level patterns persist under stronger label quality.
+
+\section{Limitations}
+
+\paragraph{Detector reliability.} The preregistered detector reliability gate was not met
+($\kappa=0.566$; threshold 0.80). Three rubric iterations were conducted (v1.0:
+$\kappa=0.011$; v2.1: $\kappa=0.519$; v3.0: $\kappa=0.566$). The gap between raw agreement
+(92.8\%) and $\kappa$ is consistent with strong prevalence skew ($\sim$87\% collapse
+prevalence in the audit set). A prevalence-adjusted statistic (PABAK = 0.856) is reported as
+supplementary sensitivity information, not as gate replacement. Consequently, all findings
+are descriptive and condition-comparative rather than detector-validated.
+
+\paragraph{Detector threshold sensitivity.} The collapse detector uses specific thresholds
+($s_1 \geq 0.92$, $s_2 \geq 0.90$, $d_1 \leq 0.08$, $d_2 \leq 0.10$, 3 consecutive
+turns) that were preregistered before analysis to prevent researcher degrees of freedom, but
+their absolute values lack independent validation. A non-confirmatory threshold sweep across
+36 configurations ($s_1 \in \{0.90, 0.92\}$, $s_2 \in \{0.88, 0.90\}$, $d_1 \in
+\{0.06, 0.08, 0.10\}$, $d_2 \in \{0.08, 0.10, 0.12\}$) showed collapse rates ranging from
+0.33 to 0.60, with no condition-rank inversions under any perturbation. While this suggests
+the condition ordering is not an artifact of a single threshold choice, a more comprehensive
+robustness analysis using alternative detection approaches (e.g., lexical overlap, n-gram
+repetition, perplexity-based metrics) remains necessary.
+
+\paragraph{Single embedding model.} The detector relies solely on MiniLM-L6-v2 embeddings
+\citep{reimers2019sentencebert}. Different embedding models might yield different collapse
+patterns. Lexical overlap metrics (n-gram self-similarity, BLEU self-similarity) or
+model-specific embeddings could serve as robustness checks in future work.
+
+\paragraph{Model coverage.} Only three 7--8B instruction-tuned models were tested. Whether
+similar patterns hold for larger models (70B+), base (non-instruction-tuned) models, models
+with different alignment approaches (RLHF vs.\ DPO), or frontier proprietary models remains
+untested. The findings are specific to these three mid-sized open-weight model families under
+the fixed generation settings used.
+
+\paragraph{No causal claims.} We observe that collapse rates differ by condition, but we do
+not establish why. Possible contributing factors---training data diversity, alignment
+procedure differences, tokenizer vocabulary effects, or architectural choices---are plausible
+hypotheses for future investigation, not conclusions of the present study.
 
 % === Conclusion ===
 \section{Conclusion}
 We provide a fully closed confirmatory baseline (720/720 tuples) for condition-dependent
-collapse behavior in 7B-model self-play under a locked protocol. The present contribution is a
-reproducible descriptive benchmark under Path B claim governance; detector-validation and
-intervention efficacy remain open tasks for future work.
+collapse behavior in 7B-model self-play under a locked protocol. The primary contribution is
+threefold: a reproducible descriptive benchmark, a locked measurement protocol with frozen
+artifacts, and a transparent account of a preregistered reliability gate failure. The
+reliability failure itself is informative---it demonstrates that even high raw agreement
+(92.8\%) can yield moderate chance-corrected agreement ($\kappa=0.566$) under prevalence skew,
+a lesson applicable to LLM evaluation pipeline design more broadly.
+
+Detector validation, human-rater reliability rescue, threshold robustness analysis with
+alternative metrics, and causal investigation of condition-level differences remain the
+highest-priority next steps. Until those are completed, the condition-level patterns reported
+here should be treated as descriptive observations, not validated behavioral findings.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
