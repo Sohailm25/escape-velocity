@@ -1,4 +1,4 @@
-# PREREG — Paper B (FTLE / λ₁) — Version 2.0
+# PREREG — FTLE (FTLE / λ₁) — Version 2.0
 
 **Changelog:**
 - v1.0 (2026-02-15): Initial prereg — estimator, stability, acceptance, success criteria
@@ -7,10 +7,10 @@
 ---
 
 ## Hypothesis (pre-commit)
-A numerically stable estimate of top-1 finite-time Lyapunov exponent (λ₁), computed for transformer depth dynamics, differs across model families and provides predictive association (not causal proof) with Paper A entrenchment/escape behavior.
+A numerically stable estimate of top-1 finite-time Lyapunov exponent (λ₁), computed for transformer depth dynamics, differs across model families and provides predictive association (not causal proof) with Escape Velocity entrenchment/escape behavior.
 
 ## Linking hypothesis and time-axis scope (locked)
-Paper A outcomes are across-turn conversational dynamics; Paper B λ₁ is within-forward-pass depth dynamics.
+Escape Velocity outcomes are across-turn conversational dynamics; FTLE λ₁ is within-forward-pass depth dynamics.
 Therefore, linkage claims are restricted to:
 - predictive association between depth-dynamics summaries and across-turn outcomes,
 - not direct mechanistic identity between the two time axes.
@@ -36,7 +36,7 @@ Implementation:
 3. **Run repeatability:** agreement across reruns with same seed/config.
 4. **Small-model sanity check:** agreement against finite-difference approximation.
 
-### B) External validity vs Paper A
+### B) External validity vs Escape Velocity
 - Correlation between λ₁ (or λ₁ profile summary) and:
   - collapse entrenchment depth,
   - escape probability,
@@ -50,30 +50,30 @@ A model-family estimate is accepted only if all hold:
 4. Small-model finite-difference agreement >= **0.80** correlation
 
 ## Analysis plan
-- Compute λ₁ on same seed/condition strata used by Paper A where possible.
+- Compute λ₁ on same seed/condition strata used by Escape Velocity where possible.
 - Use rank + linear correlations with bootstrap CIs.
 - Treat causal claims as out of scope; focus on predictive/mechanistic association.
 
 ## Success criteria (locked)
 1. Stability acceptance achieved in >= **2/3** model families.
-2. At least one preregistered λ₁ summary shows |ρ| >= **0.40** with a primary Paper A metric, 95% CI excluding 0.
+2. At least one preregistered λ₁ summary shows |ρ| >= **0.40** with a primary Escape Velocity metric, 95% CI excluding 0.
 
 ## Abort / downscope criteria (locked)
 - If stability thresholds fail in all model families, downscope to reduced-layer/smaller model diagnostic and report estimator failure mode; do not claim mechanistic validity at production scale.
 
 ## Dependency gate
-No primary Paper B claim is made unless Paper A **regime-establishment criteria** are satisfied — specifically:
+No primary FTLE claim is made unless Escape Velocity **regime-establishment criteria** are satisfied — specifically:
 1. Complete baseline execution (720/720 unique successful tuples across all 4 conditions)
 2. Protocol integrity (all runs 40 turns, no early stopping)
 3. Collapse incidence ≥ 60% in at least one condition
 
-These criteria were met (Paper A Path B outcome). The Paper A detector reliability gate (κ ≥ 0.80) was NOT met; this does not block Paper B claims but requires that all bridge-analysis results carry the explicit caveat that Paper A collapse labels have unconfirmed inter-rater reliability (see Bridge-Analysis Protocol, Paper A Label Caveat section).
+These criteria were met (Escape Velocity Path B outcome). The Escape Velocity detector reliability gate (κ ≥ 0.80) was NOT met; this does not block FTLE claims but requires that all bridge-analysis results carry the explicit caveat that Escape Velocity collapse labels have unconfirmed inter-rater reliability (see Bridge-Analysis Protocol, Escape Velocity Label Caveat section).
 
 ---
 
 ## Bridge-Analysis Protocol (locked) — v2.0 addition
 
-### Paper A Variables Consumed (frozen)
+### Escape Velocity Variables Consumed (frozen)
 
 Source: `results/internal/paper-a/phase3_baseline/analysis_bundle.csv`
 Freeze SHA256 (analysis_bundle.csv): `8219ff8cce8ba45cb6c775d499ac3b927aae7bff03f0dc7edd4d554068623810`
@@ -85,9 +85,9 @@ Freeze SHA256 (coverage_matrix.json): `60fc4f9a25bd2518b5f554a220ac3ef8c98df88f3
 | `first_collapse_turn` | int/null | Turn index of first collapse detection |
 | `collapse_incidence` | binary | Whether any collapse was detected (derived: collapse_rate > 0) |
 
-**No additional Paper A variables may be added post-hoc.** If analysis suggests other variables would be informative, they must be declared as exploratory and not used for primary claims.
+**No additional Escape Velocity variables may be added post-hoc.** If analysis suggests other variables would be informative, they must be declared as exploratory and not used for primary claims.
 
-### Paper B λ₁ Summaries (pre-registered)
+### FTLE λ₁ Summaries (pre-registered)
 
 | Summary | Computation | Description |
 |---|---|---|
@@ -97,7 +97,7 @@ Freeze SHA256 (coverage_matrix.json): `60fc4f9a25bd2518b5f554a220ac3ef8c98df88f3
 
 ### Pre-Registered Pairings (6 total)
 
-| # | λ₁ Summary | Paper A Variable | Test | Hypothesis Direction |
+| # | λ₁ Summary | Escape Velocity Variable | Test | Hypothesis Direction |
 |---|---|---|---|---|
 | 1 | `lambda1_mean` | `collapse_rate` | Spearman ρ | Exploratory (no directional prior) |
 | 2 | `lambda1_mean` | `first_collapse_turn` | Spearman ρ | Exploratory |
@@ -123,17 +123,17 @@ Freeze SHA256 (coverage_matrix.json): `60fc4f9a25bd2518b5f554a220ac3ef8c98df88f3
 - If one entire condition fails stability (Phase 2), exclude that condition from bridge analysis and report as estimator failure for that model family
 - Missing `first_collapse_turn` (non-collapsed runs): use the full 40-turn value as a censored observation; sensitivity check: exclude non-collapsed runs entirely
 
-### Paper A Label Caveat
+### Escape Velocity Label Caveat
 
-Paper A collapse labels were generated by a detector whose reliability gate was not met (κ = 0.566). Bridge analysis results must include this caveat in all reporting. Sensitivity check: repeat bridge analysis using only trajectories where both LLM raters agreed on collapse status (167/180 audit pairs).
+Escape Velocity collapse labels were generated by a detector whose reliability gate was not met (κ = 0.566). Bridge analysis results must include this caveat in all reporting. Sensitivity check: repeat bridge analysis using only trajectories where both LLM raters agreed on collapse status (167/180 audit pairs).
 
 ---
 
 ## Reliability Framework (locked) — v2.0 addition
 
-### Lesson from Paper A
+### Lesson from Escape Velocity
 
-Paper A's reliability gate used Cohen's κ on a binary classification with ~87% prevalence. Extreme base-rate skew mathematically depresses κ even at high raw agreement (92.8% agreement → κ = 0.566). Paper B avoids this failure mode by using a continuous reliability metric (ICC) on a continuous outcome (λ₁).
+Escape Velocity's reliability gate used Cohen's κ on a binary classification with ~87% prevalence. Extreme base-rate skew mathematically depresses κ even at high raw agreement (92.8% agreement → κ = 0.566). FTLE avoids this failure mode by using a continuous reliability metric (ICC) on a continuous outcome (λ₁).
 
 ### Primary Reliability Criterion
 

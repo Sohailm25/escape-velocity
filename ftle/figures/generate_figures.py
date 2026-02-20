@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Paper B figures in Everforest dark style."""
+"""Generate FTLE figures in Everforest dark style."""
 import json, sys, os
 import numpy as np
 import pandas as pd

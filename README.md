@@ -4,9 +4,9 @@
 
 This repository contains the data, code, and reproducibility artifacts for two companion studies of conversational collapse in multi-turn self-play between 7B-parameter language models.
 
-**Paper A — Condition-Dependent Collapse Dynamics** establishes that collapse dynamics are condition-dependent across 720 trajectories (4 conditions × 36 seeds × 5 repeats).
+**Escape Velocity — Condition-Dependent Collapse Dynamics** establishes that collapse dynamics are condition-dependent across 720 trajectories (4 conditions × 36 seeds × 5 repeats).
 
-**Paper B — FTLE Depth-Dynamics Signatures** (`ftle/`) estimates the top-1 finite-time Lyapunov exponent (λ₁) for transformer depth dynamics and tests whether depth-dynamics summaries predict conversational collapse.
+**FTLE — Depth-Dynamics Signatures** (`ftle/`) estimates the top-1 finite-time Lyapunov exponent (λ₁) for transformer depth dynamics and tests whether depth-dynamics summaries are associated with conversational collapse.
 
 **Key finding:** Collapse dynamics are condition-dependent. Qwen2.5-7B homogeneous self-play exhibits the highest collapse rate (mean 0.773), while Mistral-7B shows the lowest (0.141). Heterogeneous model rotation produces intermediate collapse (0.250).
 
@@ -40,11 +40,11 @@ See [METHODS.md](METHODS.md) for full detector specification and [REPRODUCIBILIT
 
 ## Links
 
-**Paper A:**
+**Escape Velocity:**
 - Distill page: https://sohailmo.ai/research/escape-velocity/
 - PDF: https://sohailmo.ai/papers/escape-velocity-2026.pdf
 
-**Paper B (FTLE):**
+**FTLE:**
 - Distill page: https://sohailmo.ai/research/ftle/
 - PDF: https://sohailmo.ai/papers/ftle-2026.pdf
 
@@ -68,8 +68,8 @@ python scripts/verify_hashes.py
 
 ```
 ├── README.md                    # This file
-├── ftle/                        # Paper B: FTLE depth-dynamics analysis
-│   ├── README.md                # Paper B overview
+├── ftle/                        # FTLE: depth-dynamics analysis
+│   ├── README.md                # FTLE overview
 │   ├── PREREG.md                # Pre-registration (v2)
 │   ├── RESULTS.md               # Final results summary
 │   ├── LIMITATIONS_AND_CAVEATS.md

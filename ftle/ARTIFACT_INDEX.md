@@ -1,4 +1,4 @@
-# Artifact Index — Paper B (FTLE / λ₁)
+# Artifact Index — FTLE (FTLE / λ₁)
 
 **Date:** 2026-02-20
 **Status:** CLOSEOUT COMPLETE
@@ -38,7 +38,7 @@ Cross-links all freeze manifests and data artifacts for Phases 0–3.
 | Bridge results | `results/phase3/bridge_results.json` | `d563c0ddce9f2cc8822290a99f29ad5d16a0bcfc6292e03408ce174e7648ebcf` |
 | Deviation table | `results/phase3/DEVIATION_TABLE.md` | see commit |
 
-## Paper A Input Artifacts (verified at Phase 3)
+## Escape Velocity Input Artifacts (verified at Phase 3)
 
 | Artifact | Path | SHA256 |
 |---|---|---|
