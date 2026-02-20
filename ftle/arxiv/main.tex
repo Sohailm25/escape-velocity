@@ -29,9 +29,9 @@ We estimate the top-1 finite-time Lyapunov exponent ($\lambda_1$) for transforme
 
 \section{Introduction}
 
-Transformer language models process input through a sequence of residual-stream updates across layers. This depth-wise computation can be viewed as a discrete dynamical system: each layer maps the hidden state to a new state, accumulating nonlinear transformations. The sensitivity of this process to perturbations---quantified by Lyapunov exponents---provides a model-intrinsic characterization of how information is amplified or suppressed during a forward pass.
+Transformer language models process input through a sequence of residual-stream updates across layers. This depth-wise computation can be viewed as a discrete dynamical system \citep{chen2018neural}: each layer maps the hidden state to a new state, accumulating nonlinear transformations. The sensitivity of this process to perturbations---quantified by Lyapunov exponents \citep{eckmann1985ergodic,wolf1985determining}---provides a model-intrinsic characterization of how information is amplified or suppressed during a forward pass.
 
-Separately, multi-turn self-play between language models exhibits \emph{conversational collapse}: a progressive loss of output novelty where models become trapped in repetitive response patterns \citep{holtzman2019curious,welleck2020neural}. Escape Velocity characterized collapse dynamics across four interaction conditions using 7B-parameter models, achieving full confirmatory closure (720/720 trajectories) but not meeting its preregistered detector reliability threshold ($\kappa = 0.566$; threshold $0.80$).
+Separately, multi-turn self-play between language models exhibits \emph{conversational collapse}: a progressive loss of output novelty where models become trapped in repetitive response patterns \citep{holtzman2019curious,welleck2020neural,li2016diversity}. Escape Velocity characterized collapse dynamics across four interaction conditions using 7B-parameter models, achieving full confirmatory closure (720/720 trajectories) but not meeting its preregistered detector reliability threshold ($\kappa = 0.566$; threshold $0.80$).
 
 This paper asks whether the depth dynamics of a single forward pass---specifically, the top-1 finite-time Lyapunov exponent ($\lambda_1$)---are associated with the across-turn collapse behavior documented in Escape Velocity. This is a \emph{predictive association} hypothesis: we test whether models whose depth dynamics exhibit certain profile features tend to collapse more in extended conversations. We do not claim causal or mechanistic identity between within-pass depth dynamics and across-turn conversational dynamics, as these operate on fundamentally different time axes.
 
@@ -39,7 +39,7 @@ This paper asks whether the depth dynamics of a single forward pass---specifical
 
 \subsection{FTLE estimator}
 
-Let $F_l$ denote the residual-stream update at layer $l$ for a fixed token-context state. The local Jacobian $J_l = \partial F_l / \partial h_l$ characterizes sensitivity at each layer. Rather than computing full Jacobians (prohibitive for $d_{\text{model}} = 4096$), we use forward-mode automatic differentiation (JVP) to propagate tangent vectors through the layer stack.
+Let $F_l$ denote the residual-stream update at layer $l$ for a fixed token-context state. The local Jacobian $J_l = \partial F_l / \partial h_l$ characterizes sensitivity at each layer. Rather than computing full Jacobians (prohibitive for $d_{\text{model}} = 4096$), we use forward-mode automatic differentiation (JVP) \citep{baydin2018automatic} to propagate tangent vectors through the layer stack.
 
 Given an initial tangent vector $v_0$, the tangent product $P_L v_0 = J_L \cdots J_2 J_1 v_0$ is computed via a single forward pass with \texttt{torch.func.jvp}. To prevent numerical overflow across 32 layers, we apply QR-based renormalization at a cadence of 4 layers (locked from Phase~1 pilot):
 
@@ -63,7 +63,7 @@ For each trajectory, we compute $\lambda_1$ using 10 random tangent seeds (seeds
 
 \begin{table}[h]
 \centering
-\caption{Model-to-condition mapping (locked from Paper~A).}
+\caption{Model-to-condition mapping (locked from Escape Velocity).}
 \label{tab:models}
 \begin{tabular}{llc}
 \toprule
@@ -81,7 +81,7 @@ HETERO\_ROT uses the first assistant model (Llama) for FTLE computation. HOMO\_A
 
 \subsection{Bridge analysis}
 
-Six preregistered Spearman rank correlations between three $\lambda_1$ summaries and two Paper~A collapse metrics:
+Six preregistered Spearman rank correlations between three $\lambda_1$ summaries and two Escape Velocity collapse metrics:
 
 \begin{itemize}
     \item \textbf{$\lambda_1$ summaries:} mean $\lambda_1$, layerwise profile variance, depth-profile slope.
@@ -118,7 +118,7 @@ All 7{,}200 FTLE calls completed with zero attrition (0 NaN/Inf, 0 failures). Wa
 \end{tabular}
 \end{table}
 
-Three of six tests pass: Tests \#4, \#5, and \#6. The preregistered success criterion ($\geq 1$ pass) is \textbf{met}.
+Three of six tests pass: Tests \#4, \#5, and \#6. The preregistered success criterion ($\geq 1$ pass) is \textbf{met}. We interpret this as conditional support for the bridge hypothesis under this protocol rather than mechanistic confirmation.
 
 \begin{figure}[h]
 \centering
@@ -176,6 +176,10 @@ Two deviations from PREREG\_v2.md were identified and corrected before results w
 
 Full before/after comparison is documented in \texttt{DEVIATION\_TABLE.md}. The fact that Test~\#4 changed from fail to pass on correction warrants additional interpretive caution.
 
+
+\subsection{What this does not show}
+These results do not establish a causal mechanism linking within-forward-pass depth dynamics to across-turn conversational collapse. They also do not guarantee transfer beyond the tested model families and protocol choices. Finally, bridge effect sizes remain bounded by the Escape Velocity label-reliability limitation ($\kappa=0.566$).
+
 \section{Limitations}
 
 \paragraph{Escape Velocity label reliability.} All bridge correlations use Escape Velocity collapse labels with unconfirmed inter-rater reliability ($\kappa = 0.566$, threshold $0.80$ not met; raw agreement 92.8\%). Effect sizes may be attenuated or inflated by label noise. The sensitivity analysis on 167 rater-agreed windows provides a partial check but not a full resolution.
@@ -186,13 +190,15 @@ Full before/after comparison is documented in \texttt{DEVIATION\_TABLE.md}. The 
 
 \paragraph{Model family confound.} HOMO\_A and HETERO\_ROT produce identical $\lambda_1$ distributions (both use Llama-3.1-8B). Between-model $\lambda_1$ variation may partially reflect architectural differences rather than a generalizable relationship.
 
+\paragraph{Predictor dependence structure.} HOMO\_A and HETERO\_ROT share the same model and seed prompts, producing identical $\lambda_1$ values for matched seeds. Additionally, within each condition, the five repeat trajectories per seed share identical $\lambda_1$ values (FTLE depends only on model, prompt, tangent seed, and cadence). Consequently, the 720-row bridge analysis contains only 108 unique $\lambda_1$ vectors (36 seeds $\times$ 3 distinct models), each repeated across multiple rows with different Escape Velocity collapse outcomes. The within-cluster collapse variance drives the observed correlations, but the non-independence of the predictor means effective degrees of freedom are lower than the nominal $n = 720$. Standard errors are likely underestimated and the reported $p$-values and confidence intervals should be interpreted as anti-conservative. The preregistered protocol specified $n = 720$ with these conditions, so we report the planned analysis but flag this structural dependence as a limitation on inferential precision.
+
 \paragraph{Precision sensitivity.} Float64 and float32 $\lambda_1$ estimates are not interchangeable ($r = 0.788$). All production runs used float32 consistently.
 
 \paragraph{Single first-turn measurement.} $\lambda_1$ is computed on the first assistant turn only. A longitudinal study computing $\lambda_1$ at each turn could provide stronger evidence but was out of scope.
 
 \section{Conclusion}
 
-We find that $\lambda_1$ \emph{profile features}---depth-profile slope and layerwise variance---show medium-to-large predictive associations with multi-turn collapse behavior ($|\rho| = 0.51$--$0.54$). Mean $\lambda_1$ alone is insufficient. These results are consistent with the hypothesis that the shape of a model's depth-dynamics sensitivity profile, measured on a single forward pass, is informative about conversational collapse susceptibility over extended interaction. We do not establish mechanism; the link between these two phenomena remains an open question.
+We find that $\lambda_1$ \emph{profile features}---depth-profile slope and layerwise variance---show medium-to-large predictive associations with multi-turn collapse behavior ($|\rho| = 0.51$--$0.54$). Mean $\lambda_1$ alone is insufficient. These results are consistent with the hypothesis that the shape of a model's depth-dynamics sensitivity profile, measured on a single forward pass, is informative about conversational collapse susceptibility over extended interaction. We do not establish mechanism; the link between these two phenomena remains an open question. For practitioners, this currently supports risk-screening use under matched settings, not mechanism-level or deployment-general claims.
 
 All findings carry the Escape Velocity label reliability caveat ($\kappa = 0.566$) and are restricted to predictive associations. Future work should pursue human-labeled reliability validation and longitudinal FTLE analysis across conversation turns.
 
