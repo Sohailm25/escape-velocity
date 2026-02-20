@@ -1,0 +1,239 @@
+{
+  "paper_a_freeze_sha256": "8219ff8cce8ba45cb6c775d499ac3b927aae7bff03f0dc7edd4d554068623810",
+  "paper_b_ftle_bundle_sha256": "753a62b3c9c814013dd0d6d1606d423653e726dd19c0a95477fecd2cade6f1a8",
+  "n_trajectories": 720,
+  "n_merged": 720,
+  "n_excluded": 0,
+  "primary_results": {
+    "tests": [
+      {
+        "test_id": 1,
+        "lambda1_summary": "lambda1_mean",
+        "lambda1_summary_csv_col": "lambda1_mean",
+        "paper_a_metric": "collapse_rate",
+        "paper_a_metric_csv_col": "collapse_rate",
+        "n": 720,
+        "rho": 0.246157,
+        "p_raw": 2.1287574870828885e-11,
+        "p_holm": 4.257514974165777e-11,
+        "ci_95_lower": 0.171334,
+        "ci_95_upper": 0.317984,
+        "pass_prereg": false
+      },
+      {
+        "test_id": 2,
+        "lambda1_summary": "lambda1_mean",
+        "lambda1_summary_csv_col": "lambda1_mean",
+        "paper_a_metric": "first_collapse_turn",
+        "paper_a_metric_csv_col": "first_collapse_turn",
+        "n": 720,
+        "rho": -0.25143,
+        "p_raw": 7.641547429702184e-12,
+        "p_holm": 2.2924642289106553e-11,
+        "ci_95_lower": -0.324052,
+        "ci_95_upper": -0.179066,
+        "pass_prereg": false
+      },
+      {
+        "test_id": 3,
+        "lambda1_summary": "lambda1_mean",
+        "lambda1_summary_csv_col": "lambda1_mean",
+        "paper_a_metric": "collapse_incidence",
+        "paper_a_metric_csv_col": "has_collapse",
+        "n": 720,
+        "rho": 0.035843,
+        "p_raw": 0.33684800629731876,
+        "p_holm": 0.33684800629731876,
+        "ci_95_lower": -0.031368,
+        "ci_95_upper": 0.102572,
+        "pass_prereg": false
+      },
+      {
+        "test_id": 4,
+        "lambda1_summary": "lambda1_var",
+        "lambda1_summary_csv_col": "layerwise_variance_mean",
+        "paper_a_metric": "collapse_rate",
+        "paper_a_metric_csv_col": "collapse_rate",
+        "n": 720,
+        "rho": 0.510527,
+        "p_raw": 4.828336661643351e-49,
+        "p_holm": 2.4141683308216755e-48,
+        "ci_95_lower": 0.450268,
+        "ci_95_upper": 0.568073,
+        "pass_prereg": true
+      },
+      {
+        "test_id": 5,
+        "lambda1_summary": "lambda1_slope",
+        "lambda1_summary_csv_col": "profile_slope_mean",
+        "paper_a_metric": "collapse_rate",
+        "paper_a_metric_csv_col": "collapse_rate",
+        "n": 720,
+        "rho": -0.535985,
+        "p_raw": 8.729618716172424e-55,
+        "p_holm": 5.237771229703454e-54,
+        "ci_95_lower": -0.591408,
+        "ci_95_upper": -0.47785,
+        "pass_prereg": true
+      },
+      {
+        "test_id": 6,
+        "lambda1_summary": "lambda1_slope",
+        "lambda1_summary_csv_col": "profile_slope_mean",
+        "paper_a_metric": "first_collapse_turn",
+        "paper_a_metric_csv_col": "first_collapse_turn",
+        "n": 720,
+        "rho": 0.506808,
+        "p_raw": 3.038098650388147e-48,
+        "p_holm": 1.2152394601552587e-47,
+        "ci_95_lower": 0.445206,
+        "ci_95_upper": 0.563709,
+        "pass_prereg": true
+      }
+    ],
+    "any_pass": true,
+    "n_passing": 3,
+    "holm_adjustment_details": {
+      "method": "Bonferroni-Holm step-down",
+      "n_tests": 6,
+      "family_alpha": 0.05,
+      "raw_p_values": [
+        0.0,
+        0.0,
+        0.33684801,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "adjusted_p_values": [
+        0.0,
+        0.0,
+        0.33684801,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "sensitivity_results": {
+    "tests": [
+      {
+        "test_id": 1,
+        "lambda1_summary": "lambda1_mean",
+        "lambda1_summary_csv_col": "lambda1_mean",
+        "paper_a_metric": "collapse_rate",
+        "paper_a_metric_csv_col": "collapse_rate",
+        "n": 167,
+        "rho": 0.255183,
+        "p_raw": 0.0008741106810922343,
+        "p_holm": 0.0017482213621844685,
+        "ci_95_lower": 0.08866,
+        "ci_95_upper": 0.408245,
+        "pass_prereg": false
+      },
+      {
+        "test_id": 2,
+        "lambda1_summary": "lambda1_mean",
+        "lambda1_summary_csv_col": "lambda1_mean",
+        "paper_a_metric": "first_collapse_turn",
+        "paper_a_metric_csv_col": "first_collapse_turn",
+        "n": 167,
+        "rho": -0.264678,
+        "p_raw": 0.0005471127929155872,
+        "p_holm": 0.0016413383787467618,
+        "ci_95_lower": -0.412541,
+        "ci_95_upper": -0.097429,
+        "pass_prereg": false
+      },
+      {
+        "test_id": 3,
+        "lambda1_summary": "lambda1_mean",
+        "lambda1_summary_csv_col": "lambda1_mean",
+        "paper_a_metric": "collapse_incidence",
+        "paper_a_metric_csv_col": "has_collapse",
+        "n": 167,
+        "rho": -0.005189,
+        "p_raw": 0.9469407159242252,
+        "p_holm": 0.9469407159242252,
+        "ci_95_lower": -0.146764,
+        "ci_95_upper": 0.136283,
+        "pass_prereg": false
+      },
+      {
+        "test_id": 4,
+        "lambda1_summary": "lambda1_var",
+        "lambda1_summary_csv_col": "layerwise_variance_mean",
+        "paper_a_metric": "collapse_rate",
+        "paper_a_metric_csv_col": "collapse_rate",
+        "n": 167,
+        "rho": 0.544632,
+        "p_raw": 2.776014626707722e-14,
+        "p_holm": 1.388007313353861e-13,
+        "ci_95_lower": 0.409603,
+        "ci_95_upper": 0.660024,
+        "pass_prereg": true
+      },
+      {
+        "test_id": 5,
+        "lambda1_summary": "lambda1_slope",
+        "lambda1_summary_csv_col": "profile_slope_mean",
+        "paper_a_metric": "collapse_rate",
+        "paper_a_metric_csv_col": "collapse_rate",
+        "n": 167,
+        "rho": -0.557213,
+        "p_raw": 5.2564521076918514e-15,
+        "p_holm": 3.153871264615111e-14,
+        "ci_95_lower": -0.669808,
+        "ci_95_upper": -0.427386,
+        "pass_prereg": true
+      },
+      {
+        "test_id": 6,
+        "lambda1_summary": "lambda1_slope",
+        "lambda1_summary_csv_col": "profile_slope_mean",
+        "paper_a_metric": "first_collapse_turn",
+        "paper_a_metric_csv_col": "first_collapse_turn",
+        "n": 167,
+        "rho": 0.51593,
+        "p_raw": 9.638235565452248e-13,
+        "p_holm": 3.855294226180899e-12,
+        "ci_95_lower": 0.381393,
+        "ci_95_upper": 0.62986,
+        "pass_prereg": true
+      }
+    ],
+    "any_pass": true,
+    "n_passing": 3,
+    "holm_adjustment_details": {
+      "method": "Bonferroni-Holm step-down",
+      "n_tests": 6,
+      "family_alpha": 0.05,
+      "raw_p_values": [
+        0.00087411,
+        0.00054711,
+        0.94694072,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "adjusted_p_values": [
+        0.00174822,
+        0.00164134,
+        0.94694072,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "n_trajectories": 167,
+    "n_audited": 180,
+    "n_agreed": 167
+  },
+  "prereg_success": true,
+  "bootstrap_n": 10000,
+  "bootstrap_rng_seed": 42,
+  "prereg_rho_threshold": 0.4,
+  "prereg_alpha": 0.05,
+  "label_caveat": "Paper A collapse labels generated by detector with unconfirmed inter-rater reliability (Cohen's kappa = 0.566, threshold 0.80 not met). See PREREG_v2.md Paper A Label Caveat section.",
+  "timestamp_utc": "2026-02-20T02:14:25.491414+00:00"
+}

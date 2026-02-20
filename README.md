@@ -1,8 +1,12 @@
-# Condition-Dependent Collapse Dynamics in Multi-Turn LLM Self-Play
+# Conversational Collapse in Multi-Turn LLM Self-Play
 
 ## Overview
 
-This repository contains the data, code, and reproducibility artifacts for our study of conversational collapse in multi-turn self-play between 7B-parameter language models.
+This repository contains the data, code, and reproducibility artifacts for two companion studies of conversational collapse in multi-turn self-play between 7B-parameter language models.
+
+**Paper A — Condition-Dependent Collapse Dynamics** establishes that collapse dynamics are condition-dependent across 720 trajectories (4 conditions × 36 seeds × 5 repeats).
+
+**Paper B — FTLE Depth-Dynamics Signatures** (`ftle/`) estimates the top-1 finite-time Lyapunov exponent (λ₁) for transformer depth dynamics and tests whether depth-dynamics summaries predict conversational collapse.
 
 **Key finding:** Collapse dynamics are condition-dependent. Qwen2.5-7B homogeneous self-play exhibits the highest collapse rate (mean 0.773), while Mistral-7B shows the lowest (0.141). Heterogeneous model rotation produces intermediate collapse (0.250).
 
@@ -36,9 +40,15 @@ See [METHODS.md](METHODS.md) for full detector specification and [REPRODUCIBILIT
 
 ## Links
 
+**Paper A:**
 - Distill page: https://sohailmo.ai/research/escape-velocity/
 - PDF: https://sohailmo.ai/papers/escape-velocity-2026.pdf
-- Public code/data repo: https://github.com/Sohailm25/escape-velocity
+
+**Paper B (FTLE):**
+- Distill page: https://sohailmo.ai/research/ftle/
+- PDF: https://sohailmo.ai/papers/ftle-2026.pdf
+
+**Code/data:** https://github.com/Sohailm25/escape-velocity
 
 ## Quick Start
 
@@ -58,6 +68,16 @@ python scripts/verify_hashes.py
 
 ```
 ├── README.md                    # This file
+├── ftle/                        # Paper B: FTLE depth-dynamics analysis
+│   ├── README.md                # Paper B overview
+│   ├── PREREG.md                # Pre-registration (v2)
+│   ├── RESULTS.md               # Final results summary
+│   ├── LIMITATIONS_AND_CAVEATS.md
+│   ├── ARTIFACT_INDEX.md
+│   ├── arxiv/                   # LaTeX manuscript + PDF
+│   ├── figures/                 # Themed figures + generation script
+│   ├── results/                 # Frozen Phase 2 + Phase 3 data
+│   └── scripts/                 # FTLE computation + analysis pipeline
 ├── METHODS.md                   # Detector specification + reliability outcome
 ├── REPRODUCIBILITY.md           # Artifact hashes + verification
 ├── DATA_DICTIONARY.md           # Field definitions for all data files
@@ -89,6 +109,12 @@ python scripts/verify_hashes.py
 ```bibtex
 @article{mohammad2026collapse,
   title={Condition-Dependent Collapse Dynamics in Multi-Turn LLM Self-Play},
+  author={Mohammad, Sohail},
+  year={2026}
+}
+
+@article{mohammad2026ftle,
+  title={Depth-Dynamics Signatures of Conversational Collapse: Finite-Time Lyapunov Analysis of Transformer Forward Passes},
   author={Mohammad, Sohail},
   year={2026}
 }
