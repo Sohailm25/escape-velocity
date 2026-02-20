@@ -24,7 +24,7 @@ Finite-Time Lyapunov Analysis of Transformer Forward Passes}
 \maketitle
 
 \begin{abstract}
-We estimate the top-1 finite-time Lyapunov exponent ($\lambda_1$) for transformer depth dynamics using forward-mode automatic differentiation (JVP-based tangent propagation) with QR renormalization, and test whether depth-dynamics summaries are associated with conversational collapse behavior observed in multi-turn self-play. Across 720 preregistered trajectories (4 conditions $\times$ 36 seeds $\times$ 5 repeats) and 7{,}200 FTLE computations on three 7B-parameter model families, we find that $\lambda_1$ \emph{profile features}---specifically the depth-profile slope ($\rho = -0.536$, $p < 10^{-53}$) and layerwise variance ($\rho = +0.511$, $p < 10^{-48}$)---show medium-to-large predictive associations with collapse metrics from Escape Velocity. Mean $\lambda_1$ alone shows only weak association ($|\rho| \leq 0.25$). Three of six preregistered Spearman correlations pass the effect-size threshold ($|\rho| \geq 0.40$, Bonferroni--Holm adjusted $p < 0.05$), meeting the preregistered success criterion. We interpret this as conditional support for a bridge hypothesis under preregistered thresholds. All findings are reported as predictive associations between within-forward-pass depth dynamics and across-turn conversational dynamics; no causal or mechanistic identity is claimed. Escape Velocity collapse labels have unconfirmed inter-rater reliability ($\kappa = 0.566$, threshold $0.80$ not met), and this caveat applies to all bridge correlations.
+We estimate the top-1 finite-time Lyapunov exponent ($\lambda_1$) for transformer depth dynamics using forward-mode automatic differentiation (JVP-based tangent propagation) with QR renormalization, and test whether depth-dynamics summaries are associated with conversational collapse behavior observed in multi-turn self-play. Across 720 preregistered trajectories (4 conditions $\times$ 36 seeds $\times$ 5 repeats) and 7{,}200 FTLE computations on three 7B-parameter model families, we observe that $\lambda_1$ \emph{profile features}---specifically the depth-profile slope ($\rho = -0.536$) and layerwise variance ($\rho = +0.511$)---show medium-to-large associations with collapse metrics from Escape Velocity. Mean $\lambda_1$ alone shows only weak association ($|\rho| \leq 0.25$). Three of six preregistered Spearman correlations pass the effect-size threshold ($|\rho| \geq 0.40$, Bonferroni--Holm adjusted $p < 0.05$), meeting the preregistered success criterion. However, the 720-row analysis contains only 108 unique $\lambda_1$ predictor vectors (36 seeds $\times$ 3 distinct models), so nominal $p$-values are anti-conservative and effect-size magnitudes should be treated as the primary evidence. We interpret this as exploratory support for a bridge hypothesis, not confirmatory relationship establishment. All findings are predictive associations; no causal or mechanistic identity is claimed. Escape Velocity collapse labels have unconfirmed inter-rater reliability ($\kappa = 0.566$, threshold $0.80$ not met), and this caveat applies to all bridge correlations.
 \end{abstract}
 
 \section{Introduction}
@@ -34,6 +34,8 @@ Transformer language models process input through a sequence of residual-stream 
 Separately, multi-turn self-play between language models exhibits \emph{conversational collapse}: a progressive loss of output novelty where models become trapped in repetitive response patterns \citep{holtzman2019curious,welleck2020neural,li2016diversity}. Escape Velocity characterized collapse dynamics across four interaction conditions using 7B-parameter models, achieving full confirmatory closure (720/720 trajectories) but not meeting its preregistered detector reliability threshold ($\kappa = 0.566$; threshold $0.80$).
 
 This paper asks whether the depth dynamics of a single forward pass---specifically, the top-1 finite-time Lyapunov exponent ($\lambda_1$)---are associated with the across-turn collapse behavior documented in Escape Velocity. This is a \emph{predictive association} hypothesis: we test whether models whose depth dynamics exhibit certain profile features tend to collapse more in extended conversations. We do not claim causal or mechanistic identity between within-pass depth dynamics and across-turn conversational dynamics, as these operate on fundamentally different time axes.
+
+The primary contributions are: (1)~a computationally feasible FTLE profiling pipeline for production-scale transformers; (2)~preregistered evidence of observed conditional associations between depth-profile features and collapse metrics; and (3)~transparent documentation of the structural limitations (predictor non-independence, inherited label uncertainty) that constrain inferential strength.
 
 \section{Methods}
 
@@ -118,7 +120,7 @@ All 7{,}200 FTLE calls completed with zero attrition (0 NaN/Inf, 0 failures). Wa
 \end{tabular}
 \end{table}
 
-Three of six tests pass: Tests \#4, \#5, and \#6. The preregistered success criterion ($\geq 1$ pass) is \textbf{met}. We interpret this as conditional support for the bridge hypothesis under this protocol rather than mechanistic confirmation.
+Three of six tests pass: Tests \#4, \#5, and \#6. The preregistered success criterion ($\geq 1$ pass) is \textbf{met}. The effect-size magnitudes ($|\rho| = 0.51$--$0.54$) are the primary evidence; the reported $p$-values are nominal and likely anti-conservative due to predictor non-independence (see Limitations). We interpret this as exploratory support for the bridge hypothesis under this protocol, not confirmatory relationship establishment or mechanistic validation.
 
 \begin{figure}[h]
 \centering
@@ -177,6 +179,14 @@ Two deviations from PREREG\_v2.md were identified and corrected before results w
 Full before/after comparison is documented in \texttt{DEVIATION\_TABLE.md}. The fact that Test~\#4 changed from fail to pass on correction warrants additional interpretive caution.
 
 
+\subsection{Candidate mechanisms (speculative)}
+The observed association between depth-profile features and collapse susceptibility is consistent with at least two broad hypotheses, neither of which is tested here:
+\begin{itemize}
+    \item \textbf{Sensitivity compression:} Models whose depth dynamics concentrate sensitivity in early layers (steep negative slope) may have less capacity to differentiate contextually diverse inputs in later layers, producing more homogeneous outputs over extended interaction.
+    \item \textbf{Architectural confound:} The three model families differ in architecture, training data, and alignment procedures. The observed $\lambda_1$ profile differences may reflect these model-level properties rather than a generalizable relationship between depth dynamics and collapse behavior. A within-model-family test (varying prompts or conditions while holding model constant) would be needed to distinguish these explanations; such a test is not available in the current design because each model family appears in only one or two conditions.
+\end{itemize}
+These remain hypotheses for follow-up investigation, not conclusions of the present study.
+
 \subsection{What this does not show}
 These results do not establish a causal mechanism linking within-forward-pass depth dynamics to across-turn conversational collapse. They also do not guarantee transfer beyond the tested model families and protocol choices. Finally, bridge effect sizes remain bounded by the Escape Velocity label-reliability limitation ($\kappa=0.566$).
 
@@ -198,9 +208,11 @@ These results do not establish a causal mechanism linking within-forward-pass de
 
 \section{Conclusion}
 
-We find that $\lambda_1$ \emph{profile features}---depth-profile slope and layerwise variance---show medium-to-large predictive associations with multi-turn collapse behavior ($|\rho| = 0.51$--$0.54$). Mean $\lambda_1$ alone is insufficient. These results are consistent with the hypothesis that the shape of a model's depth-dynamics sensitivity profile, measured on a single forward pass, is informative about conversational collapse susceptibility over extended interaction. We do not establish mechanism; the link between these two phenomena remains an open question. For practitioners, this currently supports risk-screening use under matched settings, not mechanism-level or deployment-general claims.
+We observe that $\lambda_1$ \emph{profile features}---depth-profile slope and layerwise variance---show medium-to-large associations with multi-turn collapse behavior ($|\rho| = 0.51$--$0.54$) across three 7B-parameter model families. Mean $\lambda_1$ alone is insufficient. These results are consistent with the hypothesis that the shape of a model's depth-dynamics sensitivity profile is informative about collapse susceptibility, but the evidence is exploratory rather than confirmatory: the predictor dependence structure (108 unique vectors across 720 rows) means nominal $p$-values overstate statistical certainty, and the between-model-family design cannot distinguish depth-dynamics effects from model-level confounds.
 
-All findings carry the Escape Velocity label reliability caveat ($\kappa = 0.566$) and are restricted to predictive associations. Future work should pursue human-labeled reliability validation and longitudinal FTLE analysis across conversation turns.
+The primary durable contribution is the FTLE profiling pipeline itself: a computationally tractable, numerically stable method for estimating depth-dynamics sensitivity in production-scale transformers (\$20 for 7,200 calls). The bridge evidence provides a testable direction for future work, not a confirmed relationship.
+
+All findings carry the Escape Velocity label reliability caveat ($\kappa = 0.566$) and are restricted to observed associations under the tested protocol. The highest-priority follow-ups are: (1)~human-rater reliability validation for Escape Velocity labels; (2)~dependency-aware inference (e.g., clustered bootstrap at the seed$\times$model level); and (3)~within-model-family tests using diverse prompt sets to separate model-level from prompt-level variation.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
